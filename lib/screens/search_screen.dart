@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/blocs/location_bloc/location_bloc.dart';
+import 'package:weather_app/blocs/storage_bloc/storage_bloc.dart';
 import 'package:weather_app/blocs/weather_bloc/weather_bloc.dart';
 import 'package:weather_app/data/countries.dart';
 
@@ -10,7 +11,7 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Weather')),
+      appBar: AppBar(title: Text('Select City')),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -87,9 +88,19 @@ class SearchScreen extends StatelessWidget {
                                               '${location.state!}, $country',
                                             ),
                                     onTap: () {
-                                      print(location.lat);
-                                      // context.read<WeatherBloc>().add();
+                                      // save to local storage (shared pref)
+                                      context.read<StorageBloc>().add(
+                                        SaveLocation(
+                                          location.lat,
+                                          location.lon,
+                                        ),
+                                      );
+
+                                      //close suggestion panel
                                       controller.closeView(cityName);
+
+                                      // navigate back to weather screen
+                                      Navigator.pop(context, location);
                                     },
                                   );
                                 },
@@ -108,46 +119,6 @@ class SearchScreen extends StatelessWidget {
                   ];
                 },
               ),
-
-              // BlocBuilder<LocationBloc, LocationState>(
-              //   builder: (context, state) {
-              //     if (state is LocationLoading) {
-              //       return CircularProgressIndicator();
-              //     } else if (state is LocationLoaded) {
-              //       return state.locations.isNotEmpty
-              //           ? Expanded(
-              //             child: ListView.builder(
-              //               shrinkWrap: true,
-              //               itemCount: state.locations.length,
-              //               itemBuilder: (context, index) {
-              //                 final location = state.locations[index];
-              //                 String country = getCountryName(location.country);
-              //                 return ListTile(
-              //                   title: Text(location.name),
-              //                   subtitle:
-              //                       location.state == null
-              //                           ? Text(country)
-              //                           : Text('${location.state!}, $country'),
-              //                   onTap: () {},
-              //                 );
-              //               },
-              //             ),
-              //           )
-              //           : ListTile(
-              //             title: Text('No cities found'),
-              //             leading: Icon(Icons.location_off_outlined),
-              //           );
-              //     } else if (state is LocationError) {
-              //       return Text(state.errorMessage);
-              //     } else {
-              //       return ListTile(
-              //         title: Text('Current Location'),
-              //         leading: Icon(Icons.location_searching_rounded),
-              //         onTap: () {},
-              //       );
-              //     }
-              //   },
-              // ),
             ],
           ),
         ),
