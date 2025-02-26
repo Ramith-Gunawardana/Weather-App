@@ -29,7 +29,9 @@ class WeatherScreen extends StatelessWidget {
             context.read<WeatherBloc>().add(
               FetchWeather(lat: location.lat, lon: location.lon),
             );
-            context.read<StorageBloc>().add(LoadLocation());
+            context.read<StorageBloc>().add(
+              SaveLocation(location.lat, location.lon),
+            );
           }
         },
         child: Image.asset('assets/icons/location.png', width: 24),
@@ -57,9 +59,16 @@ class WeatherScreen extends StatelessWidget {
             ),
             child: BlocBuilder<StorageBloc, StorageState>(
               builder: (context, state) {
+                print(state);
                 if (state is StorageLoading) {
                   return Center(child: CircularProgressIndicator());
                 } else if (state is StorageLoaded) {
+                  // Automatically fetch weather when storage is loaded
+                  if (context.read<WeatherBloc>().state is! WeatherLoaded) {
+                    context.read<WeatherBloc>().add(
+                      FetchWeather(lat: state.latitude, lon: state.longitude),
+                    );
+                  }
                   return BlocBuilder<WeatherBloc, WeatherState>(
                     builder: (context, state) {
                       if (state is WeatherLoading) {
@@ -113,13 +122,13 @@ class WeatherScreen extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  'High: ${state.weatherModel.tempMin.toString()}°',
+                                  'High: ${state.weatherModel.tempMax.toString()}°',
                                   textScaler: TextScaler.linear(1.2),
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                                 SizedBox(width: 16),
                                 Text(
-                                  'Low: ${state.weatherModel.tempMax.toString()}°',
+                                  'Low: ${state.weatherModel.tempMin.toString()}°',
                                   textScaler: TextScaler.linear(1.2),
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),
@@ -249,7 +258,7 @@ class WeatherScreen extends StatelessWidget {
                                     ),
                                   );
                                   context.read<StorageBloc>().add(
-                                    LoadLocation(),
+                                    SaveLocation(location.lat, location.lon),
                                   );
                                 }
                               },
