@@ -12,7 +12,6 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
   StorageBloc(this.storageService) : super(StorageInitial()) {
     on<SaveLocation>((event, emit) async {
       try {
-        print('Saving - Lat: ${event.lat}, Lon: ${event.lon}'); // Debug log
         await storageService.saveLocation(event.lat, event.lon);
         emit(StorageSaved());
         add(LoadLocation()); // Trigger LoadLocation event after saving
@@ -23,7 +22,6 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
     on<LoadLocation>((event, emit) async {
       final double? lat = await storageService.getLatitude();
       final double? lon = await storageService.getLongitude();
-      print('Loading - Lat: $lat, Lon: $lon'); // Debug log
       try {
         if (lat != null && lon != null) {
           emit(StorageLoaded(lat, lon));
