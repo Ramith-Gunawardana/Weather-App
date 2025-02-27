@@ -5,8 +5,35 @@ import 'package:weather_app/blocs/location_bloc/location_bloc.dart';
 import 'package:weather_app/blocs/storage_bloc/storage_bloc.dart';
 import 'package:weather_app/data/countries.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
+
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  // Create a controller for the search field
+  final TextEditingController _searchController = TextEditingController();
+  // Create a focus node
+  final FocusNode _searchFocus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    // Request focus after the first frame is rendered
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(_searchFocus);
+    });
+  }
+
+  @override
+  void dispose() {
+    // Dispose the controller and focus node when the screen is disposed
+    _searchController.dispose();
+    _searchFocus.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +68,7 @@ class SearchScreen extends StatelessWidget {
                     return SearchBar(
                       hintText: 'Enter city name',
                       controller: controller,
+                      focusNode: _searchFocus,
                       leading: Icon(Icons.search),
                       elevation: WidgetStatePropertyAll(0.0),
                       shape: WidgetStatePropertyAll(

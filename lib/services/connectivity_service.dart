@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/foundation.dart';
 
 class ConnectivityService {
   final Connectivity _connectivity = Connectivity();
@@ -12,9 +13,14 @@ class ConnectivityService {
       return false;
     }
 
-    // Then verify we can actually reach the internet
+    // Move the actual network lookup to a separate isolate
+    return compute(_checkNetworkAccess, 'google.com');
+  }
+
+  // Static method required for compute()
+  static Future<bool> _checkNetworkAccess(String host) async {
     try {
-      final result = await InternetAddress.lookup('google.com');
+      final result = await InternetAddress.lookup(host);
       return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
     } on SocketException catch (_) {
       return false;

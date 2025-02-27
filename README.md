@@ -71,8 +71,7 @@ lib/
 │── repository/ # API communication and data handling 
 │── screens/ # UI screens 
 │── services/ # Utility services for connectivity, storage, etc. 
-│── utils/ # Helper utilities and constants 
-│── widgets/ # Reusable UI components 
+│── utils/ # Helper utilities  
 └── main.dart # Application entry point
 ```
 
@@ -87,7 +86,7 @@ The app uses the BLoC pattern with several state classes:
 
  - [OpenWeatherMap](https://openweathermap.org/) for the weather data API
  - [Flutter](https://flutter.dev/) and its community for the amazing framework
- - [Glassmorphism Weather Icnons](https://www.figma.com/community/file/1283826005232351466) by Ilyas Mrayan
+ - [Glassmorphism Weather Icons](https://www.figma.com/community/file/1283826005232351466) by Ilyas Mrayan
  - Icons made by [Icons8](https://icons8.com/)
 
  ## License

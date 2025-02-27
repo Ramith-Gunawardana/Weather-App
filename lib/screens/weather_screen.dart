@@ -235,48 +235,45 @@ class WeatherScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 32),
                           // Call to action button
-                          SizedBox(
-                            width: 220,
-                            height: 50,
-                            child: ElevatedButton.icon(
-                              onPressed: () async {
-                                final result = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SearchScreen(),
+                          ElevatedButton.icon(
+                            onPressed: () async {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SearchScreen(),
+                                ),
+                              );
+
+                              if (result != null &&
+                                  result is LocationModel &&
+                                  context.mounted) {
+                                final location = result;
+                                context.read<WeatherBloc>().add(
+                                  FetchWeather(
+                                    lat: location.lat,
+                                    lon: location.lon,
                                   ),
                                 );
+                                context.read<StorageBloc>().add(
+                                  SaveLocation(location.lat, location.lon),
+                                );
+                              }
+                            },
+                            icon: const Icon(Icons.add_location_alt_outlined),
+                            label: const Text(
+                              'Choose Your Location',
 
-                                if (result != null &&
-                                    result is LocationModel &&
-                                    context.mounted) {
-                                  final location = result;
-                                  context.read<WeatherBloc>().add(
-                                    FetchWeather(
-                                      lat: location.lat,
-                                      lon: location.lon,
-                                    ),
-                                  );
-                                  context.read<StorageBloc>().add(
-                                    SaveLocation(location.lat, location.lon),
-                                  );
-                                }
-                              },
-                              icon: const Icon(Icons.add_location_alt_outlined),
-                              label: const Text(
-                                'Choose Your Location',
-                                style: TextStyle(fontSize: 16),
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color.fromARGB(
+                                71,
+                                192,
+                                192,
+                                192,
                               ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color.fromARGB(
-                                  71,
-                                  192,
-                                  192,
-                                  192,
-                                ),
-                                foregroundColor: Colors.white,
-                                elevation: 0.0,
-                              ),
+                              foregroundColor: Colors.white,
+                              elevation: 0.0,
                             ),
                           ),
                           const SizedBox(height: 16),
