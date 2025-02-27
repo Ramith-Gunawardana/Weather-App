@@ -133,14 +133,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                                 '${location.state!}, $country',
                                               ),
                                       onTap: () {
-                                        // save to local storage (shared pref)
-                                        context.read<StorageBloc>().add(
-                                          SaveLocation(
-                                            location.lat,
-                                            location.lon,
-                                          ),
-                                        );
-
                                         //close suggestion panel
                                         controller.closeView(cityName);
 

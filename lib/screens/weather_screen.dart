@@ -23,12 +23,14 @@ class WeatherScreen extends StatelessWidget {
             context,
             MaterialPageRoute(builder: (context) => SearchScreen()),
           );
-
-          if (result != null && result is LocationModel) {
+          print(result);
+          if (result != null && result is LocationModel && context.mounted) {
             final location = result;
+            // Update weather with new location
             context.read<WeatherBloc>().add(
               FetchWeather(lat: location.lat, lon: location.lon),
             );
+            // Save the location
             context.read<StorageBloc>().add(
               SaveLocation(location.lat, location.lon),
             );
