@@ -4,12 +4,12 @@ A beautiful Flutter application that provides real-time weather information for 
 
 ## Features
 
- -  Real-Time Weather Data: Display current temperature, weather conditions, and atmospheric details
- - Location Search: Search for any location worldwide to get weather information
- - Saved Locations: Automatically remembers your last viewed location
- - Offline Support: Checks for internet connectivity and provides appropriate feedback
- - Beautiful UI: Dynamic backgrounds that change based on weather conditions
- - Loading Animations: Shimmer effect animations during data loading
+ - Real-Time Weather Data – Get current temperature, conditions, and atmospheric details.
+ -  Location Search – Search for cities worldwide with accurate suggestions.
+ -  Saved Locations – Automatically remembers your last selected location.
+ -  Connectivity Check – Detects internet connectivity and provides feedback.
+ -  Dynamic UI – Backgrounds change based on weather conditions.
+ -  Smooth Animations – Shimmer effect while loading data.
 
 ## Screenshots
 
@@ -74,6 +74,50 @@ lib/
 │── utils/ # Helper utilities  
 └── main.dart # Application entry point
 ```
+## Dependencies
+<table>
+  <thead>
+    <tr>
+      <th>Package</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://pub.dev/packages/http">http</a></td>
+      <td>Package for making HTTP requests to fetch weather data</td>
+    </tr>
+    <tr>
+      <td><a href="https://pub.dev/packages/flutter_dotenv">flutter_dotenv</a></td>
+      <td>Securely load API Key from .env file</td>
+    </tr>
+    <tr>
+      <td><a href="https://pub.dev/packages/flutter_bloc">flutter_bloc</a></td>
+      <td>State management solution implementing the BLoC pattern</td>
+    </tr>
+    <tr>
+      <td><a href="https://pub.dev/packages/equatable">equatable</a></td>
+      <td>Simplifies equality comparisons for classes</td>
+    </tr>
+    <tr>
+      <td><a href="https://pub.dev/packages/shared_preferences">shared_preferences</a></td>
+      <td>Persistent storage for saving user locations</td>
+    </tr>
+    <tr>
+      <td><a href="https://pub.dev/packages/shimmer">shimmer</a></td>
+      <td>Creates shimmering loading effect animations</td>
+    </tr>
+    <tr>
+      <td><a href="https://pub.dev/packages/connectivity_plus">connectivity_plus</a></td>
+      <td>Network connectivity detection and monitoring</td>
+    </tr>
+    <tr>
+      <td><a href="https://pub.dev/packages/flutter_launcher_icons">flutter_launcher_icons</a></td>
+      <td>Customizes app launcher icons</td>
+    </tr>
+  </tbody>
+</table>
+
 
 ## State Management
 
