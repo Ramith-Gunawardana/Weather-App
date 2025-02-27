@@ -83,10 +83,6 @@ The app uses the BLoC pattern with several state classes:
  - StorageState: Initial, Loading, Loaded, Saved, Error
  - LocationState: Initial, Loading, Loaded, Error
 
-## Download APK
-
-You can download the latest release APK from the following link: [Download APK](./build/app/outputs/flutter-apk/app-release.apk)
-
 ## Acknowledgements
 
  - [OpenWeatherMap](https://openweathermap.org/) for the weather data API
