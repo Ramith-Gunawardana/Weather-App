@@ -12,8 +12,8 @@ class NoInternetScreen extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              const Color.fromARGB(255, 44, 0, 21),
               const Color.fromARGB(255, 145, 25, 75),
+              const Color.fromARGB(255, 44, 0, 21),
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,

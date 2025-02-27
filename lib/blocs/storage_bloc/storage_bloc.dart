@@ -20,13 +20,15 @@ class StorageBloc extends Bloc<StorageEvent, StorageState> {
       }
     });
     on<LoadLocation>((event, emit) async {
+      emit(StorageLoading());
       final double? lat = await storageService.getLatitude();
       final double? lon = await storageService.getLongitude();
       try {
         if (lat != null && lon != null) {
           emit(StorageLoaded(lat, lon));
         } else {
-          emit(StorageError("No saved location found"));
+          // first run case
+          emit(StorageInitial());
         }
       } catch (e) {
         emit(StorageError("Failed to load location: $e"));

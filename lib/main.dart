@@ -42,7 +42,10 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => LocationBloc(LocationRepository())),
         BlocProvider(create: (context) => WeatherBloc(WeatherRepository())),
-        BlocProvider(create: (context) => StorageBloc(StorageService())),
+        BlocProvider(
+          create:
+              (context) => StorageBloc(StorageService())..add(LoadLocation()),
+        ),
       ],
       child: MaterialApp(
         title: 'Weather App',
