@@ -9,7 +9,8 @@ class ConnectivityService {
   Future<bool> checkInternetConnection() async {
     // First check if we have network connectivity
     final connectivityResult = await _connectivity.checkConnectivity();
-    if (connectivityResult == ConnectivityResult.none) {
+    if (connectivityResult.isEmpty ||
+        connectivityResult.contains(ConnectivityResult.none)) {
       return false;
     }
 

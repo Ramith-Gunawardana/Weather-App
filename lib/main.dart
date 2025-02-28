@@ -2,7 +2,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:weather_app/blocs/connectivity_bloc/connectivity_bloc.dart';
 import 'package:weather_app/blocs/location_bloc/location_bloc.dart';
 import 'package:weather_app/blocs/storage_bloc/storage_bloc.dart';
 import 'package:weather_app/blocs/weather_bloc/weather_bloc.dart';
@@ -15,13 +17,18 @@ import 'package:weather_app/services/storage_service.dart';
 
 void main() async {
   // Ensures async services are initialized
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // Keep splash screen visible while initializing
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   // initialise internet connectivity
   final connectivityService = ConnectivityService();
 
   // Initialize SharedPreferences
   await SharedPreferences.getInstance();
+
+  // Pre-check connectivity
+  final isConnected = await connectivityService.checkInternetConnection();
 
   //load env file
   try {
@@ -30,12 +37,26 @@ void main() async {
     print('API KEY Error: $e');
   }
 
-  runApp(MyApp(connectivityService: connectivityService));
+  // Remove splash screen when initialization is complete
+  FlutterNativeSplash.remove();
+
+  runApp(
+    MyApp(
+      connectivityService: connectivityService,
+      initialConnectivity: isConnected,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   final ConnectivityService connectivityService;
-  const MyApp({super.key, required this.connectivityService});
+  final bool initialConnectivity;
+
+  const MyApp({
+    super.key,
+    required this.connectivityService,
+    required this.initialConnectivity,
+  });
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -46,6 +67,12 @@ class MyApp extends StatelessWidget {
           create:
               (context) => StorageBloc(StorageService())..add(LoadLocation()),
         ),
+        BlocProvider(
+          create:
+              (context) => ConnectivityBloc(connectivityService)..add(
+                ConnectivityChanged(initialConnectivity),
+              ), // Use pre-checked connectivity
+        ),
       ],
       child: MaterialApp(
         title: 'Weather App',
@@ -55,35 +82,16 @@ class MyApp extends StatelessWidget {
           colorSchemeSeed: Color.fromARGB(255, 15, 40, 54),
           brightness: Brightness.dark,
         ),
-        home: StreamBuilder<ConnectivityResult>(
-          stream: connectivityService.connectivityStream,
-          builder: (context, snapshot) {
-            // Add debugging to see what's happening
-            print(
-              "Connectivity snapshot: ${snapshot.connectionState}, ${snapshot.data}",
-            );
-
-            // If we're still waiting for the first value, check connectivity manually
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return FutureBuilder<bool>(
-                future: connectivityService.checkInternetConnection(),
-                builder: (context, asyncSnapshot) {
-                  if (asyncSnapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  return asyncSnapshot.data == true
-                      ? const WeatherScreen()
-                      : const NoInternetScreen();
-                },
-              );
+        home: BlocBuilder<ConnectivityBloc, ConnectivityState>(
+          builder: (context, state) {
+            print(state);
+            if (state is ConnectivityConnected) {
+              return const WeatherScreen();
+            } else if (state is ConnectivityDisconnected) {
+              return const NoInternetScreen();
+            } else {
+              return const Center(child: CircularProgressIndicator());
             }
-
-            // Process the stream data
-            final hasInternet = snapshot.data != ConnectivityResult.none;
-            return hasInternet
-                ? const WeatherScreen()
-                : const NoInternetScreen();
           },
         ),
       ),

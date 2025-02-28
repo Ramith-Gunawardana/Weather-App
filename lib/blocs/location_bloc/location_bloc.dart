@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:weather_app/models/location_model.dart';
 import 'package:weather_app/repository/location_repository.dart';
+import 'package:weather_app/services/connectivity_service.dart';
 
 part 'location_event.dart';
 part 'location_state.dart';
@@ -16,6 +17,15 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
         emit(LocationLoading());
 
         try {
+          // Check connectivity before making network request
+          final connectivityService = ConnectivityService();
+          final hasInternet =
+              await connectivityService.checkInternetConnection();
+
+          if (!hasInternet) {
+            emit(LocationError('No internet connection'));
+            return;
+          }
           if (event.cityName.isEmpty) {
             throw Exception("City name is null or empty");
           }

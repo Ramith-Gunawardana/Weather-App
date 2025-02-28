@@ -84,120 +84,154 @@ class WeatherScreen extends StatelessWidget {
                           containerColor: containerColor,
                         );
                       } else if (state is WeatherLoaded) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            //city
-                            Text(
-                              state.weatherModel.city,
-                              textScaler: TextScaler.linear(1.2),
-                              style: Theme.of(context).textTheme.headlineMedium,
-                              textAlign: TextAlign.center,
-                              softWrap: true,
+                        return RefreshIndicator(
+                          semanticsLabel: 'Pull to Refresh',
+                          edgeOffset: 48,
+                          onRefresh: () async {
+                            context.read<WeatherBloc>().add(
+                              FetchWeather(
+                                lat: state.weatherModel.lat,
+                                lon: state.weatherModel.lon,
+                              ),
+                            );
+                          },
+                          child: SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  //city
+                                  Text(
+                                    state.weatherModel.city,
+                                    textScaler: TextScaler.linear(1.2),
+                                    style:
+                                        Theme.of(
+                                          context,
+                                        ).textTheme.headlineMedium,
+                                    textAlign: TextAlign.center,
+                                    softWrap: true,
+                                  ),
+                                  SizedBox(height: 8),
+                                  //temp
+                                  Text(
+                                    '${state.weatherModel.temp.toInt().toString()}°',
+                                    textScaler: TextScaler.linear(1.5),
+                                    style:
+                                        Theme.of(
+                                          context,
+                                        ).textTheme.displayLarge,
+                                  ),
+                                  SizedBox(height: 32),
+                                  //icon
+                                  WeatherIconService(
+                                    conditionId: state.weatherModel.id,
+                                    iconCode: state.weatherModel.icon,
+                                  ),
+                                  // description
+                                  Text(
+                                    state.weatherModel.desc
+                                        .split(' ')
+                                        .map((word) => word.capitalize())
+                                        .join(' '),
+                                    textScaler: TextScaler.linear(1.8),
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                  SizedBox(height: 28),
+                                  // high low temps
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'High: ${state.weatherModel.tempMax.toString()}°',
+                                        textScaler: TextScaler.linear(1.2),
+                                        style:
+                                            Theme.of(
+                                              context,
+                                            ).textTheme.bodyMedium,
+                                      ),
+                                      SizedBox(width: 16),
+                                      Text(
+                                        'Low: ${state.weatherModel.tempMin.toString()}°',
+                                        textScaler: TextScaler.linear(1.2),
+                                        style:
+                                            Theme.of(
+                                              context,
+                                            ).textTheme.bodyMedium,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 32),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      //wind speed
+                                      Row(
+                                        children: [
+                                          Image.asset(
+                                            'assets/icons/wind.png',
+                                            width: 24,
+                                          ),
+                                          SizedBox(width: 8),
+                                          Text(
+                                            '${(state.weatherModel.windSpeed).toInt()} km/h',
+                                            textScaler: TextScaler.linear(1.2),
+                                            style:
+                                                Theme.of(
+                                                  context,
+                                                ).textTheme.bodyMedium,
+                                          ),
+                                        ],
+                                      ),
+                                      //humidity
+                                      Row(
+                                        children: [
+                                          Image.asset(
+                                            'assets/icons/humidity.png',
+                                            width: 24,
+                                          ),
+                                          SizedBox(width: 8),
+                                          Text(
+                                            '${state.weatherModel.humidity.toInt()} %',
+                                            textScaler: TextScaler.linear(1.2),
+                                            style:
+                                                Theme.of(
+                                                  context,
+                                                ).textTheme.bodyMedium,
+                                          ),
+                                        ],
+                                      ),
+                                      //pressure
+                                      Row(
+                                        children: [
+                                          Image.asset(
+                                            'assets/icons/pressure.png',
+                                            width: 24,
+                                          ),
+                                          SizedBox(width: 8),
+                                          Text(
+                                            '${state.weatherModel.pressure} hPa',
+                                            textScaler: TextScaler.linear(1.2),
+                                            style:
+                                                Theme.of(
+                                                  context,
+                                                ).textTheme.bodyMedium,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 8),
+                                ],
+                              ),
                             ),
-                            SizedBox(height: 8),
-                            //temp
-                            Text(
-                              '${state.weatherModel.temp.toInt().toString()}°',
-                              textScaler: TextScaler.linear(1.5),
-                              style: Theme.of(context).textTheme.displayLarge,
-                            ),
-                            //icon
-                            WeatherIconService(
-                              conditionId: state.weatherModel.id,
-                              iconCode: state.weatherModel.icon,
-                            ),
-                            // description
-                            Text(
-                              state.weatherModel.desc
-                                  .split(' ')
-                                  .map((word) => word.capitalize())
-                                  .join(' '),
-                              textScaler: TextScaler.linear(1.8),
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            SizedBox(height: 16),
-                            // high low temps
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'High: ${state.weatherModel.tempMax.toString()}°',
-                                  textScaler: TextScaler.linear(1.2),
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                                SizedBox(width: 16),
-                                Text(
-                                  'Low: ${state.weatherModel.tempMin.toString()}°',
-                                  textScaler: TextScaler.linear(1.2),
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 32),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                //wind speed
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/wind.png',
-                                      width: 24,
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      '${(state.weatherModel.windSpeed).toInt()} km/h',
-                                      textScaler: TextScaler.linear(1.2),
-                                      style:
-                                          Theme.of(
-                                            context,
-                                          ).textTheme.bodyMedium,
-                                    ),
-                                  ],
-                                ),
-                                //humidity
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/humidity.png',
-                                      width: 24,
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      '${state.weatherModel.humidity.toInt()} %',
-                                      textScaler: TextScaler.linear(1.2),
-                                      style:
-                                          Theme.of(
-                                            context,
-                                          ).textTheme.bodyMedium,
-                                    ),
-                                  ],
-                                ),
-                                //pressure
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      'assets/icons/pressure.png',
-                                      width: 24,
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      '${state.weatherModel.pressure} hPa',
-                                      textScaler: TextScaler.linear(1.2),
-                                      style:
-                                          Theme.of(
-                                            context,
-                                          ).textTheme.bodyMedium,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 8),
-                          ],
+                          ),
                         );
                       } else if (state is WeatherError) {
                         return Text('Error: $state');
