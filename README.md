@@ -29,6 +29,7 @@ A beautiful Flutter application that provides real-time weather information for 
 - **Flutter**: Cross-platform UI framework
 - **BLoC Pattern**: State management using the BLoC architecture
 - **OpenWeatherMap API**: Weather data source
+- **OpenWeatherMap Geocoding API**: Location search and suggestions
 - **Shimmer**: Loading animation effects
 - **Shared Preferences**: Local storage for saved locations
 - **Connectivity Plus**: Internet connection detection
