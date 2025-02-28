@@ -4,12 +4,14 @@ A beautiful Flutter application that provides real-time weather information for 
 
 ## Features
 
- -  Real-Time Weather Data: Display current temperature, weather conditions, and atmospheric details
- - Location Search: Search for any location worldwide to get weather information
- - Saved Locations: Automatically remembers your last viewed location
- - Offline Support: Checks for internet connectivity and provides appropriate feedback
- - Beautiful UI: Dynamic backgrounds that change based on weather conditions
- - Loading Animations: Shimmer effect animations during data loading
+ -  **Real-Time Weather Data**: Display current temperature, weather conditions, and atmospheric details
+ - **Location Search**: Search for any location worldwide to get weather information
+ - **Saved Locations**: Automatically remembers your last viewed location
+ - **Beautiful UI**: Dynamic backgrounds that change based on weather conditions
+ - **Loading Animations**: Shimmer effect animations during data loading
+ - **Pull-to-Refresh**: Update weather data with a simple pull gesture
+ - **Splash Screen**: Smooth loading experience with native splash screen
+- **Performance Optimized**: Isolates for heavy operations to maintain UI responsiveness
 
 ## Screenshots
 
@@ -24,12 +26,14 @@ A beautiful Flutter application that provides real-time weather information for 
 <td><img src="assets/screenshots/no_internet.jpg" width=270 alt="No Internet Screen"></td> </tr> </table>
 
 ## Technologies Used
- - Flutter: Cross-platform UI framework
- - BLoC Pattern: State management using the BLoC architecture
- - OpenWeatherMap API: Weather data source
- - Shimmer: Loading animation effects
- - Shared Preferences: Local storage for saved locations
- - Connectivity Plus: Internet connection detection
+- **Flutter**: Cross-platform UI framework
+- **BLoC Pattern**: State management using the BLoC architecture
+- **OpenWeatherMap API**: Weather data source
+- **Shimmer**: Loading animation effects
+- **Shared Preferences**: Local storage for saved locations
+- **Connectivity Plus**: Internet connection detection
+- **Flutter Native Splash**: Native splash screen implementation
+- **Flutter Dotenv**: Environment variable management
 
 ## Getting Started
 
@@ -63,24 +67,74 @@ A beautiful Flutter application that provides real-time weather information for 
 ## Project Structure
 ```
 lib/ 
-│── blocs/ # BLoC state management files 
-│   │── location_bloc/ # Handles location search functionality 
-│   │── storage_bloc/ # Manages saved location data 
-│   └── weather_bloc/ # Handles weather data fetching and states 
-│── models/ # Data models for locations and weather 
-│── repository/ # API communication and data handling 
-│── screens/ # UI screens 
-│── services/ # Utility services for connectivity, storage, etc. 
-│── utils/ # Helper utilities  
-└── main.dart # Application entry point
+│── blocs/                    # BLoC state management files 
+│   │── connectivity_bloc/    # Handles internet connectivity states
+│   │── location_bloc/        # Handles location search functionality 
+│   │── storage_bloc/         # Manages saved location data 
+│   └── weather_bloc/         # Handles weather data fetching and states 
+│── models/                   # Data models for locations and weather 
+│── repository/               # API communication and data handling 
+│── screens/                  # UI screens 
+│── services/                 # Utility services for connectivity, storage, etc. 
+│── utils/                    # Helper utilities and constants
+│── widgets/                  # Reusable UI components
+└── main.dart                 # Application entry point
 ```
+## Dependencies
+<table>
+  <thead>
+    <tr>
+      <th>Package</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://pub.dev/packages/http">http</a></td>
+      <td>Package for making HTTP requests to fetch weather data</td>
+    </tr>
+    <tr>
+      <td><a href="https://pub.dev/packages/flutter_dotenv">flutter_dotenv</a></td>
+      <td>Securely load API Key from .env file</td>
+    </tr>
+    <tr>
+      <td><a href="https://pub.dev/packages/flutter_bloc">flutter_bloc</a></td>
+      <td>State management solution implementing the BLoC pattern</td>
+    </tr>
+    <tr>
+      <td><a href="https://pub.dev/packages/equatable">equatable</a></td>
+      <td>Simplifies equality comparisons for classes</td>
+    </tr>
+    <tr>
+      <td><a href="https://pub.dev/packages/shared_preferences">shared_preferences</a></td>
+      <td>Persistent storage for saving user locations</td>
+    </tr>
+    <tr>
+      <td><a href="https://pub.dev/packages/shimmer">shimmer</a></td>
+      <td>Creates shimmering loading effect animations</td>
+    </tr>
+    <tr>
+      <td><a href="https://pub.dev/packages/connectivity_plus">connectivity_plus</a></td>
+      <td>Network connectivity detection and monitoring</td>
+    </tr>
+    <tr>
+      <td><a href="https://pub.dev/packages/flutter_launcher_icons">flutter_launcher_icons</a></td>
+      <td>Customizes app launcher icons</td>
+    </tr>
+    <tr>
+      <td><a href="https://pub.dev/packages/flutter_native_splash">flutter_native_splash</a></td>
+      <td>Native splash screen implementation</td>
+    </tr>
+  </tbody>
+</table>
 
 ## State Management
 
 The app uses the BLoC pattern with several state classes:
- - WeatherState: Initial, Loading, Loaded, Error
- - StorageState: Initial, Loading, Loaded, Saved, Error
- - LocationState: Initial, Loading, Loaded, Error
+ - **WeatherState**: Initial, Loading, Loaded, Error
+ - **StorageState**: Initial, Loading, Loaded, Saved, Error
+ - **LocationState**: Initial, Loading, Loaded, Error
+ - **ConnectivityState**: Initial, Loading, Connected, Disconnected
 
 ## Acknowledgements
 

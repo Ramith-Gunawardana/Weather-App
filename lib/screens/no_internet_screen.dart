@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/blocs/connectivity_bloc/connectivity_bloc.dart';
-import 'package:weather_app/screens/weather_screen.dart';
-import 'package:weather_app/services/connectivity_service.dart';
 
 class NoInternetScreen extends StatelessWidget {
   const NoInternetScreen({super.key});
